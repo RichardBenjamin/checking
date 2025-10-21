@@ -113,6 +113,10 @@ sleep 1
 # SECTION 4: Deploy Dockerized Application
 # ============================================
 log "📤 Transferring project files to remote server..."
+echo "DEBUG: SSH_KEY=$SSH_KEY"
+echo "DEBUG: SSH_USER=$SSH_USER"
+echo "DEBUG: SERVER_IP=$SERVER_IP"
+echo "DEBUG: Target path=/home/$SSH_USER/app"
 scp -i "$SSH_KEY" -r . "$SSH_USER@$SERVER_IP:/home/$SSH_USER/app"
 
 log "🚀 Deploying application remotely..."
