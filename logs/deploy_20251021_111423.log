@@ -1,0 +1,95 @@
+🗂 Logs will be saved in: ./logs/deploy_20251021_111423.log
+[2025-10-21 11:14:23] 🔧 Collecting deployment parameters...
+Enter Git Repository URL: Enter Personal Access Token (PAT): 
+Enter Branch name (default: main): Enter Remote Server Username: Enter Remote Server IP Address: Enter SSH Key Path (e.g., ~/.ssh/id_rsa): Enter Application Port (internal container port): [2025-10-21 11:16:10] ✅ User input collected successfully.
+[2025-10-21 11:16:10] Repository: https://github.com/CloudFay/hng13-stage1-devops
+[2025-10-21 11:16:10] Remote Server: ubuntu@13.60.50.143
+[2025-10-21 11:16:10] Port: 5000
+[2025-10-21 11:16:11] �� Starting repository cloning process...
+[2025-10-21 11:16:11] 📂 Repository 'hng13-stage1-devops' already exists. Pulling latest changes...
+From https://github.com/CloudFay/hng13-stage1-devops
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From https://github.com/CloudFay/hng13-stage1-devops
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[2025-10-21 11:16:14] 🐳 Dockerfile found — OK.
+[2025-10-21 11:16:14] ✅ Repository cloned and verified successfully.
+[2025-10-21 11:16:15] 🔗 Connecting to remote server: ubuntu@13.60.50.143 ...
+Pseudo-terminal will not be allocated because stdin is not a terminal.
+Welcome to Ubuntu 24.04.3 LTS (GNU/Linux 6.14.0-1011-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Tue Oct 21 10:16:16 UTC 2025
+
+  System load:  0.0               Temperature:           -273.1 C
+  Usage of /:   35.9% of 6.71GB   Processes:             124
+  Memory usage: 37%               Users logged in:       1
+  Swap usage:   0%                IPv4 address for ens5: 172.31.34.248
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+60 updates can be applied immediately.
+35 of these updates are standard security updates.
+To see these additional updates run: apt list --upgradable
+
+1 additional security update can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+
+🧰 Updating packages and installing dependencies...
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Hit:1 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble InRelease
+Hit:2 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates InRelease
+Hit:3 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-backports InRelease
+Hit:4 http://security.ubuntu.com/ubuntu noble-security InRelease
+Reading package lists...
+Building dependency tree...
+Reading state information...
+55 packages can be upgraded. Run 'apt list --upgradable' to see them.
+Reading package lists...
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+
+Building dependency tree...
+Reading state information...
+docker.io is already the newest version (28.2.2-0ubuntu1~24.04.1).
+docker-compose is already the newest version (1.29.2-6ubuntu1).
+nginx is already the newest version (1.24.0-2ubuntu7.5).
+curl is already the newest version (8.5.0-2ubuntu10.6).
+0 upgraded, 0 newly installed, 0 to remove and 55 not upgraded.
+✅ Remote environment setup complete.
+[2025-10-21 11:16:22] 📤 Transferring project files to remote server...
+scp: dest open "/home/ubuntu/app/.git/objects/ad/c39b6c46bfe1fb2ff061f8705b71896d7cd9ed": Permission denied
+scp: upload "./.git/objects/ad/c39b6c46bfe1fb2ff061f8705b71896d7cd9ed" to "/home/ubuntu/app/.git/objects/ad/c39b6c46bfe1fb2ff061f8705b71896d7cd9ed" failed
+scp: dest open "/home/ubuntu/app/.git/objects/1d/925ce0f6bb254bbecd35bda302f449b32c8187": Permission denied
+scp: upload "./.git/objects/1d/925ce0f6bb254bbecd35bda302f449b32c8187" to "/home/ubuntu/app/.git/objects/1d/925ce0f6bb254bbecd35bda302f449b32c8187" failed
+scp: dest open "/home/ubuntu/app/.git/objects/1d/9199f4eef6e6558ab6477172a2dbdedd9eca60": Permission denied
+scp: upload "./.git/objects/1d/9199f4eef6e6558ab6477172a2dbdedd9eca60" to "/home/ubuntu/app/.git/objects/1d/9199f4eef6e6558ab6477172a2dbdedd9eca60" failed
+scp: dest open "/home/ubuntu/app/.git/objects/pack/pack-3ec2e0861c8983c7aaf5b32182e17ac8d11539f0.rev": Permission denied
+scp: upload "./.git/objects/pack/pack-3ec2e0861c8983c7aaf5b32182e17ac8d11539f0.rev" to "/home/ubuntu/app/.git/objects/pack/pack-3ec2e0861c8983c7aaf5b32182e17ac8d11539f0.rev" failed
+scp: dest open "/home/ubuntu/app/.git/objects/pack/pack-3ec2e0861c8983c7aaf5b32182e17ac8d11539f0.pack": Permission denied
+scp: upload "./.git/objects/pack/pack-3ec2e0861c8983c7aaf5b32182e17ac8d11539f0.pack" to "/home/ubuntu/app/.git/objects/pack/pack-3ec2e0861c8983c7aaf5b32182e17ac8d11539f0.pack" failed
+scp: dest open "/home/ubuntu/app/.git/objects/pack/pack-3ec2e0861c8983c7aaf5b32182e17ac8d11539f0.idx": Permission denied
+scp: upload "./.git/objects/pack/pack-3ec2e0861c8983c7aaf5b32182e17ac8d11539f0.idx" to "/home/ubuntu/app/.git/objects/pack/pack-3ec2e0861c8983c7aaf5b32182e17ac8d11539f0.idx" failed
+scp: dest open "/home/ubuntu/app/.git/objects/18/7c933612e95e7459403bd3691b076165aad246": Permission denied
+scp: upload "./.git/objects/18/7c933612e95e7459403bd3691b076165aad246" to "/home/ubuntu/app/.git/objects/18/7c933612e95e7459403bd3691b076165aad246" failed
+scp: dest open "/home/ubuntu/app/.git/objects/ca/7773ede547ba8652de3fce47fcbdb3eab64efb": Permission denied
+scp: upload "./.git/objects/ca/7773ede547ba8652de3fce47fcbdb3eab64efb" to "/home/ubuntu/app/.git/objects/ca/7773ede547ba8652de3fce47fcbdb3eab64efb" failed
+scp: dest open "/home/ubuntu/app/.git/objects/dd/dea07b0c7a596b082a6abb09e3b262901a56a0": Permission denied
+scp: upload "./.git/objects/dd/dea07b0c7a596b082a6abb09e3b262901a56a0" to "/home/ubuntu/app/.git/objects/dd/dea07b0c7a596b082a6abb09e3b262901a56a0" failed
+scp: dest open "/home/ubuntu/app/.git/objects/6f/9f4a1697ce3a16204ced09a694e3e0f0446fb9": Permission denied
+scp: upload "./.git/objects/6f/9f4a1697ce3a16204ced09a694e3e0f0446fb9" to "/home/ubuntu/app/.git/objects/6f/9f4a1697ce3a16204ced09a694e3e0f0446fb9" failed
+scp: dest open "/home/ubuntu/app/.git/objects/bd/b61ec2417a8aa3e649d39c8ceeebd4bc552a9f": Permission denied
+scp: upload "./.git/objects/bd/b61ec2417a8aa3e649d39c8ceeebd4bc552a9f" to "/home/ubuntu/app/.git/objects/bd/b61ec2417a8aa3e649d39c8ceeebd4bc552a9f" failed
+scp: dest open "/home/ubuntu/app/.git/objects/82/7a57b6378c9c51f37dc041c19df8c7173552eb": Permission denied
+scp: upload "./.git/objects/82/7a57b6378c9c51f37dc041c19df8c7173552eb" to "/home/ubuntu/app/.git/objects/82/7a57b6378c9c51f37dc041c19df8c7173552eb" failed
+scp: failed to upload directory . to /home/ubuntu/app
+❌ Error occurred at line 116. Check ./logs/deploy_20251021_111423.log for details.

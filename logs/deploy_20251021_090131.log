@@ -1,0 +1,486 @@
+🗂 Logs will be saved in: ./logs/deploy_20251021_090131.log
+[2025-10-21 09:01:31] 🔧 Collecting deployment parameters...
+Enter Git Repository URL: Enter Personal Access Token (PAT): 
+Enter Branch name (default: main): Enter Remote Server Username: Enter Remote Server IP Address: Enter SSH Key Path (e.g., ~/.ssh/id_rsa): Enter Application Port (internal container port): [2025-10-21 09:02:55] ✅ User input collected successfully.
+[2025-10-21 09:02:55] Repository: https://github.com/CloudFay/hng13-stage1-devops.git
+[2025-10-21 09:02:55] Remote Server: ubuntu@13.60.50.143
+[2025-10-21 09:02:55] Port: 5000
+[2025-10-21 09:02:56] �� Starting repository cloning process...
+[2025-10-21 09:02:56] 📂 Repository 'hng13-stage1-devops' already exists. Pulling latest changes...
+From https://github.com/CloudFay/hng13-stage1-devops
+ * branch            main       -> FETCH_HEAD
+   ae9748e..ca7773e  main       -> origin/main
+Already on 'main'
+Your branch is behind 'origin/main' by 1 commit, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+From https://github.com/CloudFay/hng13-stage1-devops
+ * branch            main       -> FETCH_HEAD
+Updating ae9748e..ca7773e
+Fast-forward
+ Dockerfile                      |  17 ++++
+ app.py                          |  10 ++
+ deploy.sh                       | 196 ++++++++++++++++++++++++++++++++++++++++
+ docker-compose.yml              |   8 ++
+ hng13-stage1-devops             |   1 +
+ logs/deploy_20251021_085512.log |  13 +++
+ requirements.txt                |   2 +
+ 7 files changed, 247 insertions(+)
+ create mode 100644 Dockerfile
+ create mode 100644 app.py
+ create mode 100755 deploy.sh
+ create mode 100644 docker-compose.yml
+ create mode 160000 hng13-stage1-devops
+ create mode 100644 logs/deploy_20251021_085512.log
+ create mode 100644 requirements.txt
+[2025-10-21 09:02:59] 🐳 Dockerfile found — OK.
+[2025-10-21 09:02:59] ✅ Repository cloned and verified successfully.
+[2025-10-21 09:03:00] 🔗 Connecting to remote server: ubuntu@13.60.50.143 ...
+Pseudo-terminal will not be allocated because stdin is not a terminal.
+Welcome to Ubuntu 24.04.3 LTS (GNU/Linux 6.14.0-1011-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Tue Oct 21 08:03:02 UTC 2025
+
+  System load:  0.0               Temperature:           -273.1 C
+  Usage of /:   25.9% of 6.71GB   Processes:             112
+  Memory usage: 24%               Users logged in:       1
+  Swap usage:   0%                IPv4 address for ens5: 172.31.34.248
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+0 updates can be applied immediately.
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+
+🧰 Updating packages and installing dependencies...
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Hit:1 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble InRelease
+Get:2 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+Get:3 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+Get:4 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Get:5 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 Packages [15.0 MB]
+Get:6 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble/universe Translation-en [5982 kB]
+Get:7 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [1223 kB]
+Get:8 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 Components [3871 kB]
+Get:9 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 c-n-f Metadata [301 kB]
+Get:10 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble/multiverse amd64 Packages [269 kB]
+Get:11 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble/multiverse Translation-en [118 kB]
+Get:12 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble/multiverse amd64 Components [35.0 kB]
+Get:13 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble/multiverse amd64 c-n-f Metadata [8328 B]
+Get:14 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1523 kB]
+Get:15 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [291 kB]
+Get:16 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [175 kB]
+Get:17 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 c-n-f Metadata [15.3 kB]
+Get:18 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1496 kB]
+Get:19 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [301 kB]
+Get:20 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [377 kB]
+Get:21 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/universe amd64 c-n-f Metadata [31.3 kB]
+Get:22 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [2137 kB]
+Get:23 http://security.ubuntu.com/ubuntu noble-security/main Translation-en [205 kB]
+Get:24 http://security.ubuntu.com/ubuntu noble-security/main amd64 Components [21.6 kB]
+Get:25 http://security.ubuntu.com/ubuntu noble-security/main amd64 c-n-f Metadata [8968 B]
+Get:26 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [904 kB]
+Get:27 http://security.ubuntu.com/ubuntu noble-security/universe Translation-en [202 kB]
+Get:28 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [483 kB]
+Get:29 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Components [212 B]
+Get:30 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 c-n-f Metadata [516 B]
+Get:31 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [30.3 kB]
+Get:32 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [5564 B]
+Get:33 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
+Get:34 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 c-n-f Metadata [484 B]
+Get:35 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-backports/main amd64 Packages [40.4 kB]
+Get:36 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-backports/main Translation-en [9208 B]
+Get:37 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [7140 B]
+Get:38 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Components [52.2 kB]
+Get:39 http://security.ubuntu.com/ubuntu noble-security/universe amd64 c-n-f Metadata [19.3 kB]
+Get:40 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1985 kB]
+Get:41 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-backports/main amd64 c-n-f Metadata [368 B]
+Get:42 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [28.9 kB]
+Get:43 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-backports/universe Translation-en [17.5 kB]
+Get:44 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [11.0 kB]
+Get:45 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-backports/universe amd64 c-n-f Metadata [1444 B]
+Get:46 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-backports/restricted amd64 Components [216 B]
+Get:47 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-backports/restricted amd64 c-n-f Metadata [116 B]
+Get:48 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Components [212 B]
+Get:49 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 c-n-f Metadata [116 B]
+Get:50 http://security.ubuntu.com/ubuntu noble-security/restricted Translation-en [448 kB]
+Get:51 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Components [208 B]
+Get:52 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 c-n-f Metadata [500 B]
+Get:53 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [27.4 kB]
+Get:54 http://security.ubuntu.com/ubuntu noble-security/multiverse Translation-en [5708 B]
+Get:55 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Components [208 B]
+Get:56 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 c-n-f Metadata [384 B]
+Fetched 38.1 MB in 6s (6666 kB/s)
+Reading package lists...
+Building dependency tree...
+Reading state information...
+54 packages can be upgraded. Run 'apt list --upgradable' to see them.
+Reading package lists...
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+
+Building dependency tree...
+Reading state information...
+curl is already the newest version (8.5.0-2ubuntu10.6).
+curl set to manually installed.
+The following additional packages will be installed:
+  bridge-utils containerd dns-root-data dnsmasq-base nginx-common pigz
+  python3-compose python3-docker python3-dockerpty python3-docopt
+  python3-dotenv python3-texttable python3-websocket runc ubuntu-fan
+Suggested packages:
+  ifupdown aufs-tools cgroupfs-mount | cgroup-lite debootstrap docker-buildx
+  docker-compose-v2 docker-doc rinse zfs-fuse | zfsutils fcgiwrap nginx-doc
+  ssl-cert
+The following NEW packages will be installed:
+  bridge-utils containerd dns-root-data dnsmasq-base docker-compose docker.io
+  nginx nginx-common pigz python3-compose python3-docker python3-dockerpty
+  python3-docopt python3-dotenv python3-texttable python3-websocket runc
+  ubuntu-fan
+0 upgraded, 18 newly installed, 0 to remove and 54 not upgraded.
+Need to get 76.8 MB of archives.
+After this operation, 291 MB of additional disk space will be used.
+Get:1 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 pigz amd64 2.8-1 [65.6 kB]
+Get:2 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble/main amd64 bridge-utils amd64 1.7.1-1ubuntu2 [33.9 kB]
+Get:3 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 runc amd64 1.3.0-0ubuntu2~24.04.1 [8743 kB]
+Get:4 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 containerd amd64 1.7.28-0ubuntu1~24.04.1 [38.4 MB]
+Get:5 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 dns-root-data all 2024071801~ubuntu0.24.04.1 [5918 B]
+Get:6 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 dnsmasq-base amd64 2.90-2ubuntu0.1 [376 kB]
+Get:7 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 python3-websocket all 1.7.0-1 [38.1 kB]
+Get:8 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/universe amd64 python3-docker all 5.0.3-1ubuntu1.1 [89.1 kB]
+Get:9 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 python3-dockerpty all 0.4.1-5 [11.4 kB]
+Get:10 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 python3-docopt all 0.6.2-6 [26.1 kB]
+Get:11 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 python3-dotenv all 1.0.1-1 [22.3 kB]
+Get:12 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 python3-texttable all 1.6.7-1 [11.0 kB]
+Get:13 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 python3-compose all 1.29.2-6ubuntu1 [84.6 kB]
+Get:14 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 docker-compose all 1.29.2-6ubuntu1 [14.0 kB]
+Get:15 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/universe amd64 docker.io amd64 28.2.2-0ubuntu1~24.04.1 [28.3 MB]
+Get:16 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 nginx-common all 1.24.0-2ubuntu7.5 [43.4 kB]
+Get:17 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 nginx amd64 1.24.0-2ubuntu7.5 [520 kB]
+Get:18 http://eu-north-1.ec2.archive.ubuntu.com/ubuntu noble-updates/universe amd64 ubuntu-fan all 0.12.16+24.04.1 [34.2 kB]
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+dpkg-preconfigure: unable to re-open stdin: 
+Fetched 76.8 MB in 1s (102 MB/s)
+Selecting previously unselected package pigz.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 71718 files and directories currently installed.)
+Preparing to unpack .../00-pigz_2.8-1_amd64.deb ...
+Unpacking pigz (2.8-1) ...
+Selecting previously unselected package bridge-utils.
+Preparing to unpack .../01-bridge-utils_1.7.1-1ubuntu2_amd64.deb ...
+Unpacking bridge-utils (1.7.1-1ubuntu2) ...
+Selecting previously unselected package runc.
+Preparing to unpack .../02-runc_1.3.0-0ubuntu2~24.04.1_amd64.deb ...
+Unpacking runc (1.3.0-0ubuntu2~24.04.1) ...
+Selecting previously unselected package containerd.
+Preparing to unpack .../03-containerd_1.7.28-0ubuntu1~24.04.1_amd64.deb ...
+Unpacking containerd (1.7.28-0ubuntu1~24.04.1) ...
+Selecting previously unselected package dns-root-data.
+Preparing to unpack .../04-dns-root-data_2024071801~ubuntu0.24.04.1_all.deb ...
+Unpacking dns-root-data (2024071801~ubuntu0.24.04.1) ...
+Selecting previously unselected package dnsmasq-base.
+Preparing to unpack .../05-dnsmasq-base_2.90-2ubuntu0.1_amd64.deb ...
+Unpacking dnsmasq-base (2.90-2ubuntu0.1) ...
+Selecting previously unselected package python3-websocket.
+Preparing to unpack .../06-python3-websocket_1.7.0-1_all.deb ...
+Unpacking python3-websocket (1.7.0-1) ...
+Selecting previously unselected package python3-docker.
+Preparing to unpack .../07-python3-docker_5.0.3-1ubuntu1.1_all.deb ...
+Unpacking python3-docker (5.0.3-1ubuntu1.1) ...
+Selecting previously unselected package python3-dockerpty.
+Preparing to unpack .../08-python3-dockerpty_0.4.1-5_all.deb ...
+Unpacking python3-dockerpty (0.4.1-5) ...
+Selecting previously unselected package python3-docopt.
+Preparing to unpack .../09-python3-docopt_0.6.2-6_all.deb ...
+Unpacking python3-docopt (0.6.2-6) ...
+Selecting previously unselected package python3-dotenv.
+Preparing to unpack .../10-python3-dotenv_1.0.1-1_all.deb ...
+Unpacking python3-dotenv (1.0.1-1) ...
+Selecting previously unselected package python3-texttable.
+Preparing to unpack .../11-python3-texttable_1.6.7-1_all.deb ...
+Unpacking python3-texttable (1.6.7-1) ...
+Selecting previously unselected package python3-compose.
+Preparing to unpack .../12-python3-compose_1.29.2-6ubuntu1_all.deb ...
+Unpacking python3-compose (1.29.2-6ubuntu1) ...
+Selecting previously unselected package docker-compose.
+Preparing to unpack .../13-docker-compose_1.29.2-6ubuntu1_all.deb ...
+Unpacking docker-compose (1.29.2-6ubuntu1) ...
+Selecting previously unselected package docker.io.
+Preparing to unpack .../14-docker.io_28.2.2-0ubuntu1~24.04.1_amd64.deb ...
+Unpacking docker.io (28.2.2-0ubuntu1~24.04.1) ...
+Selecting previously unselected package nginx-common.
+Preparing to unpack .../15-nginx-common_1.24.0-2ubuntu7.5_all.deb ...
+Unpacking nginx-common (1.24.0-2ubuntu7.5) ...
+Selecting previously unselected package nginx.
+Preparing to unpack .../16-nginx_1.24.0-2ubuntu7.5_amd64.deb ...
+Unpacking nginx (1.24.0-2ubuntu7.5) ...
+Selecting previously unselected package ubuntu-fan.
+Preparing to unpack .../17-ubuntu-fan_0.12.16+24.04.1_all.deb ...
+Unpacking ubuntu-fan (0.12.16+24.04.1) ...
+Setting up python3-dotenv (1.0.1-1) ...
+Setting up python3-texttable (1.6.7-1) ...
+Setting up python3-docopt (0.6.2-6) ...
+Setting up nginx-common (1.24.0-2ubuntu7.5) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+Created symlink /etc/systemd/system/multi-user.target.wants/nginx.service → /usr/lib/systemd/system/nginx.service.
+Setting up dnsmasq-base (2.90-2ubuntu0.1) ...
+Setting up runc (1.3.0-0ubuntu2~24.04.1) ...
+Setting up dns-root-data (2024071801~ubuntu0.24.04.1) ...
+Setting up bridge-utils (1.7.1-1ubuntu2) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+Setting up pigz (2.8-1) ...
+Setting up containerd (1.7.28-0ubuntu1~24.04.1) ...
+Created symlink /etc/systemd/system/multi-user.target.wants/containerd.service → /usr/lib/systemd/system/containerd.service.
+Setting up python3-websocket (1.7.0-1) ...
+Setting up python3-dockerpty (0.4.1-5) ...
+Setting up ubuntu-fan (0.12.16+24.04.1) ...
+Created symlink /etc/systemd/system/multi-user.target.wants/ubuntu-fan.service → /usr/lib/systemd/system/ubuntu-fan.service.
+Setting up nginx (1.24.0-2ubuntu7.5) ...
+ * Upgrading binary nginx
+   ...done.
+Setting up python3-docker (5.0.3-1ubuntu1.1) ...
+Setting up docker.io (28.2.2-0ubuntu1~24.04.1) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+info: Selecting GID from range 100 to 999 ...
+info: Adding group `docker' (GID 113) ...
+Created symlink /etc/systemd/system/multi-user.target.wants/docker.service → /usr/lib/systemd/system/docker.service.
+Created symlink /etc/systemd/system/sockets.target.wants/docker.socket → /usr/lib/systemd/system/docker.socket.
+Setting up python3-compose (1.29.2-6ubuntu1) ...
+Setting up docker-compose (1.29.2-6ubuntu1) ...
+Processing triggers for man-db (2.12.0-4build2) ...
+Processing triggers for dbus (1.14.10-4ubuntu4.1) ...
+Processing triggers for ufw (0.36.2-6) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+✅ Remote environment setup complete.
+[2025-10-21 09:03:36] 📤 Transferring project files to remote server...
+[2025-10-21 09:04:25] 🚀 Deploying application remotely...
+Pseudo-terminal will not be allocated because stdin is not a terminal.
+Welcome to Ubuntu 24.04.3 LTS (GNU/Linux 6.14.0-1011-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Tue Oct 21 08:04:27 UTC 2025
+
+  System load:  0.21              Temperature:           -273.1 C
+  Usage of /:   33.5% of 6.71GB   Processes:             125
+  Memory usage: 30%               Users logged in:       1
+  Swap usage:   0%                IPv4 address for ens5: 172.31.34.248
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+60 updates can be applied immediately.
+35 of these updates are standard security updates.
+To see these additional updates run: apt list --upgradable
+
+1 additional security update can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+
+Error response from daemon: No such container: myapp
+Error response from daemon: No such container: myapp
+🧱 Using docker-compose for deployment...
+Removing network app_default
+Network app_default not found.
+Creating network "app_default" with the default driver
+Building web
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  96.77kB
+Step 1/6 : FROM python:3.9-slim
+3.9-slim: Pulling from library/python
+8c7716127147: Pulling fs layer
+f5f7ec28452e: Pulling fs layer
+1f4b7af3d5b2: Pulling fs layer
+5b8b459b5346: Pulling fs layer
+5b8b459b5346: Waiting
+f5f7ec28452e: Verifying Checksum
+f5f7ec28452e: Download complete
+1f4b7af3d5b2: Verifying Checksum
+1f4b7af3d5b2: Download complete
+5b8b459b5346: Verifying Checksum
+5b8b459b5346: Download complete
+8c7716127147: Verifying Checksum
+8c7716127147: Download complete
+8c7716127147: Pull complete
+f5f7ec28452e: Pull complete
+1f4b7af3d5b2: Pull complete
+5b8b459b5346: Pull complete
+Digest: sha256:4b4280a26f3f544f5ea1a544b6246a301f96a118171d6b467a5f82480dfc849b
+Status: Downloaded newer image for python:3.9-slim
+ ---> 455962325b3b
+Step 2/6 : WORKDIR /app
+ ---> Running in b02ef022520c
+ ---> Removed intermediate container b02ef022520c
+ ---> 185d02a0e64b
+Step 3/6 : COPY . /app
+ ---> 6f999ccc5a10
+Step 4/6 : RUN pip install flask
+ ---> Running in 2269c09652a1
+Collecting flask
+  Downloading flask-3.1.2-py3-none-any.whl (103 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 103.3/103.3 kB 8.0 MB/s eta 0:00:00
+Collecting importlib-metadata>=3.6.0
+  Downloading importlib_metadata-8.7.0-py3-none-any.whl (27 kB)
+Collecting blinker>=1.9.0
+  Downloading blinker-1.9.0-py3-none-any.whl (8.5 kB)
+Collecting jinja2>=3.1.2
+  Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 134.9/134.9 kB 19.2 MB/s eta 0:00:00
+Collecting werkzeug>=3.1.0
+  Downloading werkzeug-3.1.3-py3-none-any.whl (224 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 224.5/224.5 kB 28.6 MB/s eta 0:00:00
+Collecting itsdangerous>=2.2.0
+  Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+Collecting markupsafe>=2.1.1
+  Downloading markupsafe-3.0.3-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (20 kB)
+Collecting click>=8.1.3
+  Downloading click-8.1.8-py3-none-any.whl (98 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 98.2/98.2 kB 15.2 MB/s eta 0:00:00
+Collecting zipp>=3.20
+  Downloading zipp-3.23.0-py3-none-any.whl (10 kB)
+Installing collected packages: zipp, markupsafe, itsdangerous, click, blinker, werkzeug, jinja2, importlib-metadata, flask
+Successfully installed blinker-1.9.0 click-8.1.8 flask-3.1.2 importlib-metadata-8.7.0 itsdangerous-2.2.0 jinja2-3.1.6 markupsafe-3.0.3 werkzeug-3.1.3 zipp-3.23.0
+[91mWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+[0m[91m
+[notice] A new release of pip is available: 23.0.1 -> 25.2
+[notice] To update, run: pip install --upgrade pip
+[0m ---> Removed intermediate container 2269c09652a1
+ ---> cc8878cf3e1b
+Step 5/6 : EXPOSE 5000
+ ---> Running in 8836d82d5d62
+ ---> Removed intermediate container 8836d82d5d62
+ ---> a5f63978b64b
+Step 6/6 : CMD ["python", "app.py"]
+ ---> Running in df78042ff93b
+ ---> Removed intermediate container df78042ff93b
+ ---> fae937a39091
+Successfully built fae937a39091
+Successfully tagged app_web:latest
+Creating myapp ... 
+Creating myapp ... done
+✅ Application deployed successfully!
+[2025-10-21 09:04:42] ⚙️ Configuring Nginx reverse proxy...
+Pseudo-terminal will not be allocated because stdin is not a terminal.
+Welcome to Ubuntu 24.04.3 LTS (GNU/Linux 6.14.0-1011-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Tue Oct 21 08:04:27 UTC 2025
+
+  System load:  0.21              Temperature:           -273.1 C
+  Usage of /:   33.5% of 6.71GB   Processes:             125
+  Memory usage: 30%               Users logged in:       1
+  Swap usage:   0%                IPv4 address for ens5: 172.31.34.248
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+60 updates can be applied immediately.
+35 of these updates are standard security updates.
+To see these additional updates run: apt list --upgradable
+
+1 additional security update can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+
+2025/10/21 08:04:45 [emerg] 3731#3731: invalid number of arguments in "proxy_set_header" directive in /etc/nginx/sites-enabled/myapp:7
+nginx: configuration file /etc/nginx/nginx.conf test failed
+Job for nginx.service failed.
+See "systemctl status nginx.service" and "journalctl -xeu nginx.service" for details.
+✅ Nginx proxy configured successfully.
+[2025-10-21 09:04:46] 🧪 Validating deployment...
+Pseudo-terminal will not be allocated because stdin is not a terminal.
+Welcome to Ubuntu 24.04.3 LTS (GNU/Linux 6.14.0-1011-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Tue Oct 21 08:04:27 UTC 2025
+
+  System load:  0.21              Temperature:           -273.1 C
+  Usage of /:   33.5% of 6.71GB   Processes:             125
+  Memory usage: 30%               Users logged in:       1
+  Swap usage:   0%                IPv4 address for ens5: 172.31.34.248
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+60 updates can be applied immediately.
+35 of these updates are standard security updates.
+To see these additional updates run: apt list --upgradable
+
+1 additional security update can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+
+🔍 Checking running containers...
+CONTAINER ID   IMAGE     COMMAND           CREATED         STATUS         PORTS                                         NAMES
+575ae1d376f1   app_web   "python app.py"   8 seconds ago   Up 7 seconds   0.0.0.0:5000->5000/tcp, [::]:5000->5000/tcp   myapp
+🌐 Testing application endpoint...
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 HTTP/1.1 200 OK
+Server: nginx/1.24.0 (Ubuntu)
+Date: Tue, 21 Oct 2025 08:04:49 GMT
+Content-Type: text/html
+Content-Length: 615
+Last-Modified: Tue, 21 Oct 2025 08:03:22 GMT
+Connection: keep-alive
+ETag: "68f73e4a-267"
+Accept-Ranges: bytes
+
+--:--:-- --:--:-- --:--:--     0  0   615    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+[2025-10-21 09:04:49] ✅ Deployment validation complete!
+[2025-10-21 09:04:49] 🚀 Deployment process completed successfully!

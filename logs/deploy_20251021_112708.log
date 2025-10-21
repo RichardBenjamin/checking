@@ -1,0 +1,4 @@
+🗂 Logs will be saved in: ./logs/deploy_20251021_112708.log
+[2025-10-21 11:27:08] 🔧 Collecting deployment parameters...
+Enter Git Repository URL: Enter Personal Access Token (PAT): 
+Enter Branch name (default: main): Enter Remote Server Username: Enter Remote Server IP Address: Enter SSH Key Path (e.g., ~/.ssh/id_rsa): 
