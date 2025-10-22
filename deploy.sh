@@ -1,3 +1,5 @@
+#!/bin/bash
+
 
 #  Setup for safety and error handling ---
 set -e
