@@ -18,13 +18,14 @@ log() {
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
 }
 
-# ============================================
-# SECTION 1: Collect User Inputs
-# ============================================
+
+# To collect User Inputs
+
 log " Collecting inputs for deployment."
 
 read -p "Enter your Git Repository URL: " Repo_Url
 read -s -p "Enter your Personal Access Token (PAT): " PAT
+echo
 read -p "Enter your branch name (default branch is main): " Branch
 read -p "Enter your remote server username: " SSH_User
 read -p "Enter your remote server IP address: " Server_Ip
@@ -53,7 +54,7 @@ log "Application Port: $App_Port"
 sleep 1
 
 
-# Stage 2: Cloning of Repository
+# To clone the Repository
 log "Cloning Repository ....."
 
 # # Extract repo name from URL (e.g., https://github.com/user/app.git → app)
@@ -87,9 +88,9 @@ log "Repository has been cloned successfully."
 
 sleep 1
 
-# ============================================
-# SECTION 3: SSH and Remote Setup
-# ============================================
+
+# To Setup SSH and Remote Setup
+
 log "🔗 Connecting to remote server: $SSH_User@$Server_Ip ..."
 
 ssh -i "$SSH_Key" -o StrictHostKeyChecking=no "$SSH_User@$Server_Ip" << EOF
@@ -105,9 +106,9 @@ EOF
 
 sleep 1
 
-# ============================================
-# SECTION 4: Deploy Dockerized Application
-# ============================================
+
+# To Setup Deployed Dockerized Application
+
 log " Copying project files to remote server via scp"
 scp -i "$SSH_Key" -r $(ls -A | grep -v '.git') "$SSH_User@$Server_Ip:/home/$SSH_User/app"
 log " Application is been deployed remotely."
@@ -116,8 +117,8 @@ ssh -i "$SSH_Key" "$SSH_User@$Server_Ip" << EOF
   cd /home/$SSH_User/app
 
   # To stop old containers to ensure Idempotent redploy (idempotent redeploy)
-  docker stop myapp || true
-  docker rm myapp || true
+  docker stop hng-task1-app || true
+  docker rm hng-task1-app || true
 
   if [ -f "docker-compose.yml" ]; then
     echo "Using docker-compose for deployment."
@@ -125,8 +126,8 @@ ssh -i "$SSH_Key" "$SSH_User@$Server_Ip" << EOF
     docker-compose up -d --build
   else
     echo "Using Dockerfile for deployment."
-    docker build -t myapp .
-    docker run -d -p ${APP_Port}:${APP_Port} --name myapp myapp
+    docker build -t hng-task1-app .
+    docker run -d -p ${APP_Port}:${APP_Port} --name hng-task1-app hng-task1-app
   fi
 
   echo "✅ Application deployed successfully!"
@@ -135,11 +136,10 @@ EOF
 sleep 1
 
 # ============================================
-# SECTION 5: Configure Nginx Reverse Proxy
-# ============================================
+# To Setup configured Nginx Reverse Proxy 
 log "⚙️ Configuring Nginx reverse proxy..."
 ssh -i "$SSH_Key" "$SSH_User@$Server_Ip" << EOF
-  sudo bash -c 'cat > /etc/nginx/sites-available/myapp << NGINX_CONF
+  sudo bash -c 'cat > /etc/nginx/sites-available/hng-task1-app << NGINX_CONF
 server {
     listen 80;
     server_name _;
@@ -152,40 +152,40 @@ server {
 }
 NGINX_CONF'
 
-  sudo ln -sf /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/
+  sudo ln -sf /etc/nginx/sites-available/ /etc/nginx/sites-enabled/
   sudo nginx -t
   sudo systemctl reload nginx
-  echo "✅ Nginx proxy configured successfully."
+  echo "Nginx proxy configured successfully."
 EOF
 
 sleep 1
 
-# ============================================
-# SECTION 6: Validate Deployment
-# ============================================
-log "🧪 Validating deployment..."
+
+# To setup for Validating Deployment
+
+log " Validating deployment..."
 ssh -i "$SSH_Key" "$SSH_User@$Server_Ip" << EOF
-  echo "🔍 Checking running containers..."
+  echo " Checking running containers..."
   docker ps
-  echo "🌐 Testing application endpoint..."
-  curl -I http://localhost || echo "⚠️ Warning: Application may not be responding locally."
+  echo " Testing application endpoint..."
+  curl -I http://localhost || echo " Warning: Application may not be responding locally."
 EOF
 
-log "✅ Deployment validation complete!"
+log " Deployment validation complete!"
 
-# ============================================
-# SECTION 7: Cleanup & Idempotency
-# ============================================
+
+# Setup for Cleanup and Idempotency
+
 if [[ "${1:-}" == "--cleanup" ]]; then
-  log "🧹 Cleaning up deployment resources..."
+  log " Cleaning up deployment resources..."
   ssh -i "$SSH_Key" "$SSH_User@$Server_Ip" << EOF
-    docker stop myapp || true
-    docker rm myapp || true
+    docker stop hng-task1-app || true
+    docker rm hng-task1-app || true
     sudo rm -rf /home/$SSH_User/app
-    sudo rm -f /etc/nginx/sites-enabled/myapp /etc/nginx/sites-available/myapp
+    sudo rm -f /etc/nginx/sites-enabled/hng-task1-app /etc/nginx/sites-available/hng-task1-app
     sudo systemctl reload nginx
-    echo "🧼 Cleanup complete."
+    echo " Cleanup complete."
 EOF
 fi
 
-log "🚀 Deployment process completed successfully!"
+log " Deployment process completed successfully!"
