@@ -1,8 +1,9 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  web:
+  hng_task1_app:
     build: .
-    container_name: myapp
+    container_name: hng_task1_app
     ports:
-      - "5000:5000"
+      - "3000:3000"
+    restart: always

@@ -1,24 +1,17 @@
-#!/bin/bash
-# ============================================
-# Automated Deployment Script (deploy.sh)
-# Author: Faith Omobude
-# Description: Automates cloning, setup, and deployment of a Dockerized application to a remote Linux server with Nginx reverse proxy, full logging, and error handling.
-# ============================================
 
-# --- Safety & Error Handling ---
+#  Setup for safety and error handling ---
 set -e
-set -o pipefail
-set -u
 
-# --- Logging Setup ---
-LOG_DIR="./logs"
-mkdir -p "$LOG_DIR"   # Create logs directory if it doesn’t exist
 
-LOG_FILE="$LOG_DIR/deploy_$(date +%Y%m%d_%H%M%S).log"
-exec > >(tee -a "$LOG_FILE") 2>&1
-trap 'echo "❌ Error occurred at line $LINENO. Check $LOG_FILE for details."' ERR
+#  Setup for logging  
+Log_Dir="./logs"
+mkdir -p "$Log_Dir"  
 
-echo "🗂 Logs will be saved in: $LOG_FILE"
+Log_File="$Log_Dir/deploy_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$Log_File") 2>&1
+trap 'echo "Error occurred at line $LineNo. Check $Log_File for more details."' ERR
+
+echo "Logs will be saved in: $Log_File"
 
 # --- Utility Function for Timestamped Logs ---
 log() {
@@ -28,83 +21,86 @@ log() {
 # ============================================
 # SECTION 1: Collect User Inputs
 # ============================================
-log "🔧 Collecting deployment parameters..."
+log " Collecting inputs for deployment."
 
-read -p "Enter Git Repository URL: " GIT_URL
-read -s -p "Enter Personal Access Token (PAT): " PAT
-echo ""
-read -p "Enter Branch name (default: main): " BRANCH
-BRANCH=${BRANCH:-main}
-read -p "Enter Remote Server Username: " SSH_USER
-read -p "Enter Remote Server IP Address: " SERVER_IP
-read -p "Enter SSH Key Path (e.g., ~/.ssh/id_rsa): " SSH_KEY
-read -p "Enter Application Port (internal container port): " APP_PORT
+read -p "Enter your Git Repository URL: " Repo_Url
+read -s -p "Enter your Personal Access Token (PAT): " PAT
+read -p "Enter your branch name (default branch is main): " Branch
+read -p "Enter your remote server username: " SSH_User
+read -p "Enter your remote server IP address: " Server_Ip
+read -p "Enter SSH key path: " SSH_Key
+read -p "Enter your Application Port (internal container port): " App_Port
 
-# --- Validate Inputs ---
-if [[ -z "$GIT_URL" || -z "$PAT" || -z "$SSH_USER" || -z "$SERVER_IP" || -z "$SSH_KEY" || -z "$APP_PORT" ]]; then
-  log "❌ Error: All fields are required. Please rerun the script and provide all values."
+# To Main As Default Branch
+Branch=${Branch:-main}
+
+# Local variables
+Repo_Dir=$(basename "$Repo_Url" .git)
+Remote_Dir="/home/$SSH_User/app"
+Nginx_Conf="/etc/nginx/sites-available/HNG_app"
+
+# To Validate Inputs
+if [[ -z "$Repo_Url" || -z "$PAT" || -z "$SSH_User" || -z "$Server_Ip" || -z "$SSH_Key" || -z "$App_Port" ]]; then
+  log " Error: All fields are required for script to run."
   exit 1
 fi
 
-log "✅ User input collected successfully."
-log "Repository: $GIT_URL"
-log "Remote Server: $SSH_USER@$SERVER_IP"
-log "Port: $APP_PORT"
+log "All User inputs collected."
+log "Git Repository Url: $GIT_Url"
+log "Remote Server: $SSH_User@$Server_Ip"
+log "Application Port: $App_Port"
 
 sleep 1
 
-# ============================================
-# SECTION 2: Clone Repository
-# ============================================
-log "�� Starting repository cloning process..."
 
-# Extract repo name from URL (e.g., https://github.com/user/app.git → app)
-REPO_DIR=$(basename "$GIT_URL" .git)
+# Stage 2: Cloning of Repository
+log "Cloning Repository ....."
 
-# If repo already exists, pull latest changes
-if [ -d "$REPO_DIR" ]; then
-  log "📂 Repository '$REPO_DIR' already exists. Pulling latest changes..."
-  cd "$REPO_DIR"
-  git fetch origin "$BRANCH"
-  git checkout "$BRANCH"
-  git pull origin "$BRANCH"
+# # Extract repo name from URL (e.g., https://github.com/user/app.git → app)
+# REPO_DIR=$(basename "$GIT_URL" .git)
+
+# Checking if repo already exists, to pull latest changes
+if [ -d "$Repo_Dir" ]; then
+  log " Repository '$Repo_Dir' already exists. Pulling latest changes..."
+  cd "$Repo_Dir"
+  git fetch origin "$Branch"
+  git switch "$Branch"
+  git pull origin "$Branch"
 else
-  log "📦 Cloning repository from $GIT_URL ..."
-  git clone https://${PAT}@${GIT_URL#https://}
-  cd "$REPO_DIR"
-  git checkout "$BRANCH"
+  log " Cloning $GIT_Url ..."
+  git clone https://${PAT}@${Repo_Url#https://}
+  cd "$Repo_Dir"
+  git switch "$Branch"
 fi
 
-# Validate Docker configuration
+# To verify Docker configuration
 if [[ -f "Dockerfile" ]]; then
-  log "🐳 Dockerfile found — OK."
+  log " Dockerfile found."
 elif [[ -f "docker-compose.yml" ]]; then
-  log "🧱 docker-compose.yml found — OK."
+  log "docker-compose.yml found."
 else
-  log "❌ No Dockerfile or docker-compose.yml found. Cannot proceed."
+  log " No Dockerfile or docker-compose.yml found. Add Docker file to continue."
   exit 1
 fi
 
-log "✅ Repository cloned and verified successfully."
+log "Repository has been cloned successfully."
 
 sleep 1
 
 # ============================================
 # SECTION 3: SSH and Remote Setup
 # ============================================
-log "🔗 Connecting to remote server: $SSH_USER@$SERVER_IP ..."
+log "🔗 Connecting to remote server: $SSH_User@$Server_Ip ..."
 
-ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no "$SSH_USER@$SERVER_IP" << EOF
+ssh -i "$SSH_Key" -o StrictHostKeyChecking=no "$SSH_User@$Server_Ip" << EOF
   set -e
-  echo "🧰 Updating packages and installing dependencies..."
+  echo " Updating packages and installing dependencies..."
   sudo apt update -y
-  sudo apt install -y docker.io docker-compose nginx curl
-
+  sudo apt install -y docker.io docker-compose curl nginx
   sudo systemctl enable docker
   sudo systemctl start docker
   sudo usermod -aG docker \$USER
 
-  echo "✅ Remote environment setup complete."
 EOF
 
 sleep 1
@@ -112,25 +108,25 @@ sleep 1
 # ============================================
 # SECTION 4: Deploy Dockerized Application
 # ============================================
-log "📤 Transferring project files to remote server..."
-scp -i "$SSH_KEY" -r $(ls -A | grep -v '.git') "$SSH_USER@$SERVER_IP:/home/$SSH_USER/app"
-log "🚀 Deploying application remotely..."
-ssh -i "$SSH_KEY" "$SSH_USER@$SERVER_IP" << EOF
+log " Copying project files to remote server via scp"
+scp -i "$SSH_Key" -r $(ls -A | grep -v '.git') "$SSH_User@$Server_Ip:/home/$SSH_User/app"
+log " Application is been deployed remotely."
+ssh -i "$SSH_Key" "$SSH_User@$Server_Ip" << EOF
   set -e
-  cd /home/$SSH_USER/app
+  cd /home/$SSH_User/app
 
-  # Stop any old containers (idempotent redeploy)
+  # To stop old containers to ensure Idempotent redploy (idempotent redeploy)
   docker stop myapp || true
   docker rm myapp || true
 
   if [ -f "docker-compose.yml" ]; then
-    echo "🧱 Using docker-compose for deployment..."
+    echo "Using docker-compose for deployment."
     docker-compose down || true
     docker-compose up -d --build
   else
-    echo "🐳 Using Dockerfile for deployment..."
+    echo "Using Dockerfile for deployment."
     docker build -t myapp .
-    docker run -d -p ${APP_PORT}:${APP_PORT} --name myapp myapp
+    docker run -d -p ${APP_Port}:${APP_Port} --name myapp myapp
   fi
 
   echo "✅ Application deployed successfully!"
@@ -142,14 +138,14 @@ sleep 1
 # SECTION 5: Configure Nginx Reverse Proxy
 # ============================================
 log "⚙️ Configuring Nginx reverse proxy..."
-ssh -i "$SSH_KEY" "$SSH_USER@$SERVER_IP" << EOF
+ssh -i "$SSH_Key" "$SSH_User@$Server_Ip" << EOF
   sudo bash -c 'cat > /etc/nginx/sites-available/myapp << NGINX_CONF
 server {
     listen 80;
     server_name _;
 
     location / {
-        proxy_pass http://localhost:${APP_PORT};
+        proxy_pass http://localhost:${App_Port};
         proxy_set_header Host \$host;
         proxy_set_header X-Real-IP \$remote_addr;
     }
@@ -168,7 +164,7 @@ sleep 1
 # SECTION 6: Validate Deployment
 # ============================================
 log "🧪 Validating deployment..."
-ssh -i "$SSH_KEY" "$SSH_USER@$SERVER_IP" << EOF
+ssh -i "$SSH_Key" "$SSH_User@$Server_Ip" << EOF
   echo "🔍 Checking running containers..."
   docker ps
   echo "🌐 Testing application endpoint..."
@@ -182,10 +178,10 @@ log "✅ Deployment validation complete!"
 # ============================================
 if [[ "${1:-}" == "--cleanup" ]]; then
   log "🧹 Cleaning up deployment resources..."
-  ssh -i "$SSH_KEY" "$SSH_USER@$SERVER_IP" << EOF
+  ssh -i "$SSH_Key" "$SSH_User@$Server_Ip" << EOF
     docker stop myapp || true
     docker rm myapp || true
-    sudo rm -rf /home/$SSH_USER/app
+    sudo rm -rf /home/$SSH_User/app
     sudo rm -f /etc/nginx/sites-enabled/myapp /etc/nginx/sites-available/myapp
     sudo systemctl reload nginx
     echo "🧼 Cleanup complete."
