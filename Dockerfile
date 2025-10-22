@@ -1,17 +1,20 @@
-# Use an official lightweight Python image
-FROM python:3.9-slim
+# Use official Node.js image
+FROM node:18-alpine
 
 # Set working directory
 WORKDIR /app
 
-# Copy app code
-COPY . /app
+# Copy package files first
+COPY package*.json ./
 
 # Install dependencies
-RUN pip install flask
+RUN npm install --production
 
-# Expose port 5000
-EXPOSE 5000
+# Copy all project files
+COPY . .
 
-# Run the app
-CMD ["python", "app.py"]
+# Expose app port
+EXPOSE 3000
+
+# Start app
+CMD ["node", "app.js"]
